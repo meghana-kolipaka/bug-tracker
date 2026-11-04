@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bug Tracker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="top">
+    <h1>Bug Tracker</h1>
+    <ul class="counts" id="counts" aria-label="Bug counts">
+      <li><strong id="count-open">0</strong> open</li>
+      <li><strong id="count-progress">0</strong> in progress</li>
+      <li><strong id="count-fixed">0</strong> fixed</li>
+    </ul>
+  </header>
+
+  <main class="layout">
+    <section class="panel" aria-labelledby="form-title">
+      <h2 id="form-title">Report a bug</h2>
+      <div class="form" id="bug-form">
+        <input type="hidden" id="bug-id">
+        <label for="title">Title</label>
+        <input id="title" type="text" maxlength="120" placeholder="Short summary of the problem">
+
+        <label for="description">What happened?</label>
+        <textarea id="description" rows="4" placeholder="Steps to reproduce, expected and actual result"></textarea>
+
+        <div class="row">
+          <div>
+            <label for="severity">Severity</label>
+            <select id="severity">
+              {% for s in severities %}<option {% if s == 'Medium' %}selected{% endif %}>{{ s }}</option>{% endfor %}
+            </select>
+          </div>
+          <div>
+            <label for="status">Status</label>
+            <select id="status">
+              {% for s in statuses %}<option>{{ s }}</option>{% endfor %}
+            </select>
+          </div>
+        </div>
+
+        <p class="error" id="form-error" role="alert" hidden></p>
+        <div class="actions">
+          <button class="btn primary" id="save-btn" type="button">Save bug</button>
+          <button class="btn" id="cancel-btn" type="button" hidden>Cancel edit</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel list" aria-labelledby="list-title">
+      <h2 id="list-title">All bugs</h2>
+      <div class="filters">
+        <input id="search" type="search" placeholder="Search title or description" aria-label="Search bugs">
+        <select id="filter-severity" aria-label="Filter by severity">
+          <option value="">Any severity</option>
+          {% for s in severities %}<option>{{ s }}</option>{% endfor %}
+        </select>
+        <select id="filter-status" aria-label="Filter by status">
+          <option value="">Any status</option>
+          {% for s in statuses %}<option>{{ s }}</option>{% endfor %}
+        </select>
+      </div>
+      <ul class="bugs" id="bugs"></ul>
+      <p class="empty" id="empty" hidden>No bugs match. Report one using the form.</p>
+    </section>
+  </main>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
